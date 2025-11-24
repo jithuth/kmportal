@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/footer"
 import { createClient } from "@/utils/supabase/server"
 import Link from "next/link"
 import { Calendar as CalendarIcon, User } from "lucide-react"
+import { stripHtml, truncateText } from "@/utils/text"
 
 export default async function NewsPage() {
     const supabase = await createClient()
@@ -55,7 +56,7 @@ export default async function NewsPage() {
                                         </Link>
                                     </h2>
                                     <p className="mb-4 flex-1 text-gray-600 line-clamp-3 text-sm">
-                                        {item.content?.substring(0, 150)}...
+                                        {truncateText(item.summary || stripHtml(item.content || ''), 150)}
                                     </p>
                                     <Link href={`/news/${item.id}`} className="text-sm font-medium text-emerald-600 hover:underline">
                                         Read full story &rarr;

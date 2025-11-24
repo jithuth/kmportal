@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/footer";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { ArrowRight, TrendingUp, Calendar, Phone, Clock } from "lucide-react";
+import { stripHtml, truncateText } from "@/utils/text";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -43,6 +44,7 @@ export default async function Home() {
     title: "Welcome to Kuwait Malayali Portal",
     content: "Your trusted community portal connecting Malayalis in Kuwait. Stay updated with news, events, and services.",
     category: "Community",
+    summary: "Your trusted community portal connecting Malayalis in Kuwait. Stay updated with news, events, and services."
   };
 
   const recentNews = recentNewsData?.slice(0, 3) || []; // Take top 3 for display
@@ -64,7 +66,7 @@ export default async function Home() {
                 {featuredNews.title}
               </h1>
               <p className="text-gray-200 text-sm line-clamp-2 mb-4">
-                {featuredNews.content?.substring(0, 150)}...
+                {truncateText(featuredNews.summary || stripHtml(featuredNews.content || ''), 150)}
               </p>
               <Link href={`/news/${featuredNews.id}`} className="inline-flex items-center bg-white text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition-colors">
                 Read More <ArrowRight className="ml-2" size={16} />
@@ -127,7 +129,9 @@ export default async function Home() {
                         <span className="text-[10px] text-gray-400">{new Date(news.created_at).toLocaleDateString()}</span>
                       </div>
                       <h3 className="font-bold text-base mb-1.5 text-gray-900 line-clamp-2 group-hover:text-emerald-600 transition-colors">{news.title}</h3>
-                      <p className="text-gray-600 text-xs line-clamp-3 leading-relaxed">{news.content?.substring(0, 100)}...</p>
+                      <p className="text-gray-600 text-xs line-clamp-3 leading-relaxed">
+                        {truncateText(news.summary || stripHtml(news.content || ''), 100)}
+                      </p>
                     </div>
                   </Link>
                 ))
