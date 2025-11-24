@@ -42,25 +42,25 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ id
             <main className="flex-grow">
                 <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     {/* Category Badge */}
-                    <div className="mb-4">
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+                    <div className="mb-6 text-center">
+                        <span className="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-medium bg-emerald-50 text-emerald-700 border border-emerald-100 shadow-sm">
                             {article.category || 'General'}
                         </span>
                     </div>
 
                     {/* Title */}
-                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 leading-relaxed text-center max-w-3xl mx-auto">
                         {article.title}
                     </h1>
 
                     {/* Meta Information */}
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-8 pb-8 border-b border-gray-200">
+                    <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-500 mb-8 pb-8 border-b border-gray-100">
                         <div className="flex items-center gap-2">
-                            <User className="h-4 w-4" />
-                            <span>{author?.full_name || 'Anonymous'}</span>
+                            <User className="h-4 w-4 text-emerald-600" />
+                            <span className="font-medium text-gray-700">{author?.full_name || 'Anonymous'}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Calendar className="h-4 w-4" />
+                            <Calendar className="h-4 w-4 text-emerald-600" />
                             <span>{new Date(article.created_at).toLocaleDateString('en-US', {
                                 year: 'numeric',
                                 month: 'long',
@@ -68,10 +68,10 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ id
                             })}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Eye className="h-4 w-4" />
+                            <Eye className="h-4 w-4 text-emerald-600" />
                             <span>{article.views || 0} views</span>
                         </div>
-                        <Button variant="ghost" size="sm" className="ml-auto">
+                        <Button variant="ghost" size="sm" className="text-gray-500 hover:text-emerald-600">
                             <Share2 className="h-4 w-4 mr-2" />
                             Share
                         </Button>
