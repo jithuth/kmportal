@@ -4,12 +4,13 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Image from '@tiptap/extension-image'
-import Youtube from '@tiptap/extension-youtube'
 import Placeholder from '@tiptap/extension-placeholder'
+import TextAlign from '@tiptap/extension-text-align'
 import {
     Bold, Italic, Strikethrough, Code, List, ListOrdered,
     Quote, Undo, Redo, Link as LinkIcon, Image as ImageIcon,
-    Youtube as YoutubeIcon, Heading1, Heading2, Heading3
+    Heading1, Heading2, Heading3,
+    AlignLeft, AlignCenter, AlignRight, AlignJustify
 } from 'lucide-react'
 import { useCallback } from 'react'
 
@@ -28,17 +29,6 @@ const MenuBar = ({ editor }: { editor: any }) => {
         const url = window.prompt('URL')
         if (url) {
             editor.chain().focus().setImage({ src: url }).run()
-        }
-    }, [editor])
-
-    const addYoutube = useCallback(() => {
-        const url = window.prompt('Enter YouTube URL')
-        if (url) {
-            editor.commands.setYoutubeVideo({
-                src: url,
-                width: 640,
-                height: 480,
-            })
         }
     }, [editor])
 
@@ -90,7 +80,44 @@ const MenuBar = ({ editor }: { editor: any }) => {
             >
                 <Strikethrough className="w-4 h-4" />
             </button>
+
             <div className="w-px h-6 bg-gray-300 mx-1 self-center"></div>
+
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().setTextAlign('left').run()}
+                className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'left' }) ? 'bg-gray-200 text-emerald-600' : 'text-gray-600'}`}
+                title="Align Left"
+            >
+                <AlignLeft className="w-4 h-4" />
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().setTextAlign('center').run()}
+                className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'center' }) ? 'bg-gray-200 text-emerald-600' : 'text-gray-600'}`}
+                title="Align Center"
+            >
+                <AlignCenter className="w-4 h-4" />
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().setTextAlign('right').run()}
+                className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'right' }) ? 'bg-gray-200 text-emerald-600' : 'text-gray-600'}`}
+                title="Align Right"
+            >
+                <AlignRight className="w-4 h-4" />
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+                className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: 'justify' }) ? 'bg-gray-200 text-emerald-600' : 'text-gray-600'}`}
+                title="Justify"
+            >
+                <AlignJustify className="w-4 h-4" />
+            </button>
+
+            <div className="w-px h-6 bg-gray-300 mx-1 self-center"></div>
+
             <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
@@ -115,7 +142,9 @@ const MenuBar = ({ editor }: { editor: any }) => {
             >
                 <Heading3 className="w-4 h-4" />
             </button>
+
             <div className="w-px h-6 bg-gray-300 mx-1 self-center"></div>
+
             <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -140,7 +169,9 @@ const MenuBar = ({ editor }: { editor: any }) => {
             >
                 <Quote className="w-4 h-4" />
             </button>
+
             <div className="w-px h-6 bg-gray-300 mx-1 self-center"></div>
+
             <button
                 type="button"
                 onClick={setLink}
@@ -157,15 +188,9 @@ const MenuBar = ({ editor }: { editor: any }) => {
             >
                 <ImageIcon className="w-4 h-4" />
             </button>
-            <button
-                type="button"
-                onClick={addYoutube}
-                className="p-2 rounded hover:bg-gray-200 text-gray-600"
-                title="YouTube"
-            >
-                <YoutubeIcon className="w-4 h-4" />
-            </button>
+
             <div className="w-px h-6 bg-gray-300 mx-1 self-center"></div>
+
             <button
                 type="button"
                 onClick={() => editor.chain().focus().undo().run()}
@@ -196,11 +221,11 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
                 openOnClick: false,
             }),
             Image,
-            Youtube.configure({
-                controls: false,
-            }),
             Placeholder.configure({
                 placeholder: placeholder || 'Write your content here...',
+            }),
+            TextAlign.configure({
+                types: ['heading', 'paragraph'],
             }),
         ],
         content: value,

@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { createClient } from "@/utils/supabase/client"
 import { Upload, X, Image as ImageIcon, Save, FileText, Video, Youtube, Loader2, ArrowLeft } from "lucide-react"
+import RichTextEditor from "@/components/ui/rich-text-editor"
 
 export default function EditContentPage() {
     const router = useRouter()
@@ -224,8 +225,8 @@ export default function EditContentPage() {
                                     type="button"
                                     onClick={() => setContentType('text')}
                                     className={`p-4 rounded-lg border-2 transition-all ${contentType === 'text'
-                                            ? 'border-emerald-600 bg-emerald-50'
-                                            : 'border-gray-200 hover:border-gray-300'
+                                        ? 'border-emerald-600 bg-emerald-50'
+                                        : 'border-gray-200 hover:border-gray-300'
                                         }`}
                                 >
                                     <FileText className={`h-8 w-8 mx-auto mb-2 ${contentType === 'text' ? 'text-emerald-600' : 'text-gray-400'
@@ -238,8 +239,8 @@ export default function EditContentPage() {
                                     type="button"
                                     onClick={() => setContentType('video')}
                                     className={`p-4 rounded-lg border-2 transition-all ${contentType === 'video'
-                                            ? 'border-emerald-600 bg-emerald-50'
-                                            : 'border-gray-200 hover:border-gray-300'
+                                        ? 'border-emerald-600 bg-emerald-50'
+                                        : 'border-gray-200 hover:border-gray-300'
                                         }`}
                                 >
                                     <Video className={`h-8 w-8 mx-auto mb-2 ${contentType === 'video' ? 'text-emerald-600' : 'text-gray-400'
@@ -252,8 +253,8 @@ export default function EditContentPage() {
                                     type="button"
                                     onClick={() => setContentType('youtube')}
                                     className={`p-4 rounded-lg border-2 transition-all ${contentType === 'youtube'
-                                            ? 'border-emerald-600 bg-emerald-50'
-                                            : 'border-gray-200 hover:border-gray-300'
+                                        ? 'border-emerald-600 bg-emerald-50'
+                                        : 'border-gray-200 hover:border-gray-300'
                                         }`}
                                 >
                                     <Youtube className={`h-8 w-8 mx-auto mb-2 ${contentType === 'youtube' ? 'text-emerald-600' : 'text-gray-400'
@@ -318,28 +319,11 @@ export default function EditContentPage() {
                         </CardHeader>
                         <CardContent>
                             {contentType === 'text' && (
-                                <div className="space-y-2">
-                                    <div className="border border-gray-300 rounded-lg overflow-hidden">
-                                        <div className="bg-gray-50 border-b border-gray-300 px-3 py-2 flex items-center gap-1 flex-wrap">
-                                            <button type="button" className="p-1.5 hover:bg-gray-200 rounded text-gray-600" title="Bold">
-                                                <strong>B</strong>
-                                            </button>
-                                            <button type="button" className="p-1.5 hover:bg-gray-200 rounded text-gray-600" title="Italic">
-                                                <em>I</em>
-                                            </button>
-                                            <button type="button" className="p-1.5 hover:bg-gray-200 rounded text-gray-600" title="Underline">
-                                                <u>U</u>
-                                            </button>
-                                        </div>
-                                        <textarea
-                                            className="w-full min-h-[400px] px-4 py-3 text-sm focus:outline-none resize-none"
-                                            placeholder="Write your article content here..."
-                                            value={content}
-                                            onChange={(e) => setContent(e.target.value)}
-                                            required
-                                        />
-                                    </div>
-                                </div>
+                                <RichTextEditor
+                                    value={content}
+                                    onChange={setContent}
+                                    placeholder="Write your article content here..."
+                                />
                             )}
 
                             {contentType === 'video' && (
