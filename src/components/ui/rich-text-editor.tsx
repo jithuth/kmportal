@@ -1,8 +1,17 @@
 "use client"
 
-import { useMemo } from 'react'
-import dynamic from 'next/dynamic'
-import 'react-quill/dist/quill.snow.css'
+import { useEditor, EditorContent } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import Link from '@tiptap/extension-link'
+import Image from '@tiptap/extension-image'
+import Youtube from '@tiptap/extension-youtube'
+import Placeholder from '@tiptap/extension-placeholder'
+import {
+    Bold, Italic, Strikethrough, Code, List, ListOrdered,
+    Quote, Undo, Redo, Link as LinkIcon, Image as ImageIcon,
+    Youtube as YoutubeIcon, Heading1, Heading2, Heading3
+} from 'lucide-react'
+import { useCallback } from 'react'
 
 interface RichTextEditorProps {
     value: string
@@ -10,124 +19,205 @@ interface RichTextEditorProps {
     placeholder?: string
 }
 
-export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
-    // Dynamically import ReactQuill to avoid SSR issues
-    const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), {
-        ssr: false,
-        loading: () => <div className="min-h-[400px] border border-gray-300 rounded-lg animate-pulse bg-gray-50" />
-    }), [])
-
-    const modules = {
-        toolbar: [
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-            [{ 'font': [] }],
-            [{ 'size': ['small', false, 'large', 'huge'] }],
-            ['bold', 'italic', 'underline', 'strike'],
-            [{ 'color': [] }, { 'background': [] }],
-            [{ 'script': 'sub' }, { 'script': 'super' }],
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-            [{ 'indent': '-1' }, { 'indent': '+1' }],
-            [{ 'align': [] }],
-            ['blockquote', 'code-block'],
-            ['link', 'image', 'video'],
-            ['clean']
-        ],
-        clipboard: {
-            matchVisual: false,
-        }
+const MenuBar = ({ editor }: { editor: any }) => {
+    if (!editor) {
+        return null
     }
 
-    const formats = [
-        'header', 'font', 'size',
-        'bold', 'italic', 'underline', 'strike',
-        'color', 'background',
-        'script',
-        'list', 'bullet', 'indent',
-        'align',
-        'blockquote', 'code-block',
-        'link', 'image', 'video'
-    ]
+    const addImage = useCallback(() => {
+        const url = window.prompt('URL')
+        if (url) {
+            editor.chain().focus().setImage({ src: url }).run()
+        }
+    }, [editor])
+
+    const addYoutube = useCallback(() => {
+        const url = window.prompt('Enter YouTube URL')
+        if (url) {
+            editor.commands.setYoutubeVideo({
+                src: url,
+                width: 640,
+                height: 480,
+            })
+        }
+    }, [editor])
+
+    const setLink = useCallback(() => {
+        const previousUrl = editor.getAttributes('link').href
+        const url = window.prompt('URL', previousUrl)
+
+        // cancelled
+        if (url === null) {
+            return
+        }
+
+        // empty
+        if (url === '') {
+            editor.chain().focus().extendMarkRange('link').unsetLink().run()
+            return
+        }
+
+        // update
+        editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
+    }, [editor])
 
     return (
-        <div className="rich-text-editor">
-            <ReactQuill
-                theme="snow"
-                value={value}
-                onChange={onChange}
-                modules={modules}
-                formats={formats}
-                placeholder={placeholder || "Write your content here..."}
-                className="bg-white"
-            />
-            <style jsx global>{`
-                .rich-text-editor .quill {
-                    border: 1px solid #d1d5db;
-                    border-radius: 0.5rem;
-                    overflow: hidden;
-                }
-                
-                .rich-text-editor .ql-toolbar {
-                    background: #f9fafb;
-                    border: none;
-                    border-bottom: 1px solid #d1d5db;
-                    border-radius: 0.5rem 0.5rem 0 0;
-                }
-                
-                .rich-text-editor .ql-container {
-                    border: none;
-                    font-size: 14px;
-                    min-height: 400px;
-                }
-                
-                .rich-text-editor .ql-editor {
-                    min-height: 400px;
-                    padding: 1rem;
-                }
-                
-                .rich-text-editor .ql-editor.ql-blank::before {
-                    color: #9ca3af;
-                    font-style: normal;
-                }
-                
-                .rich-text-editor .ql-snow .ql-stroke {
-                    stroke: #4b5563;
-                }
-                
-                .rich-text-editor .ql-snow .ql-fill {
-                    fill: #4b5563;
-                }
-                
-                .rich-text-editor .ql-snow .ql-picker-label {
-                    color: #4b5563;
-                }
-                
-                .rich-text-editor .ql-toolbar button:hover,
-                .rich-text-editor .ql-toolbar button:focus,
-                .rich-text-editor .ql-toolbar button.ql-active {
-                    color: #059669;
-                }
-                
-                .rich-text-editor .ql-toolbar button:hover .ql-stroke,
-                .rich-text-editor .ql-toolbar button:focus .ql-stroke,
-                .rich-text-editor .ql-toolbar button.ql-active .ql-stroke {
-                    stroke: #059669;
-                }
-                
-                .rich-text-editor .ql-toolbar button:hover .ql-fill,
-                .rich-text-editor .ql-toolbar button:focus .ql-fill,
-                .rich-text-editor .ql-toolbar button.ql-active .ql-fill {
-                    fill: #059669;
-                }
-                
-                .rich-text-editor .ql-snow.ql-toolbar button:hover,
-                .rich-text-editor .ql-snow .ql-toolbar button:hover,
-                .rich-text-editor .ql-snow.ql-toolbar button:focus,
-                .rich-text-editor .ql-snow .ql-toolbar button:focus,
-                .rich-text-editor .ql-snow.ql-toolbar button.ql-active,
-                .rich-text-editor .ql-snow .ql-toolbar button.ql-active {
-                    background: #d1fae5;
-                }
-            `}</style>
+        <div className="border-b border-gray-200 bg-gray-50 p-2 flex flex-wrap gap-1">
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleBold().run()}
+                disabled={!editor.can().chain().focus().toggleBold().run()}
+                className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bold') ? 'bg-gray-200 text-emerald-600' : 'text-gray-600'}`}
+                title="Bold"
+            >
+                <Bold className="w-4 h-4" />
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleItalic().run()}
+                disabled={!editor.can().chain().focus().toggleItalic().run()}
+                className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('italic') ? 'bg-gray-200 text-emerald-600' : 'text-gray-600'}`}
+                title="Italic"
+            >
+                <Italic className="w-4 h-4" />
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleStrike().run()}
+                disabled={!editor.can().chain().focus().toggleStrike().run()}
+                className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('strike') ? 'bg-gray-200 text-emerald-600' : 'text-gray-600'}`}
+                title="Strike"
+            >
+                <Strikethrough className="w-4 h-4" />
+            </button>
+            <div className="w-px h-6 bg-gray-300 mx-1 self-center"></div>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('heading', { level: 1 }) ? 'bg-gray-200 text-emerald-600' : 'text-gray-600'}`}
+                title="Heading 1"
+            >
+                <Heading1 className="w-4 h-4" />
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('heading', { level: 2 }) ? 'bg-gray-200 text-emerald-600' : 'text-gray-600'}`}
+                title="Heading 2"
+            >
+                <Heading2 className="w-4 h-4" />
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('heading', { level: 3 }) ? 'bg-gray-200 text-emerald-600' : 'text-gray-600'}`}
+                title="Heading 3"
+            >
+                <Heading3 className="w-4 h-4" />
+            </button>
+            <div className="w-px h-6 bg-gray-300 mx-1 self-center"></div>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleBulletList().run()}
+                className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('bulletList') ? 'bg-gray-200 text-emerald-600' : 'text-gray-600'}`}
+                title="Bullet List"
+            >
+                <List className="w-4 h-4" />
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('orderedList') ? 'bg-gray-200 text-emerald-600' : 'text-gray-600'}`}
+                title="Ordered List"
+            >
+                <ListOrdered className="w-4 h-4" />
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleBlockquote().run()}
+                className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('blockquote') ? 'bg-gray-200 text-emerald-600' : 'text-gray-600'}`}
+                title="Quote"
+            >
+                <Quote className="w-4 h-4" />
+            </button>
+            <div className="w-px h-6 bg-gray-300 mx-1 self-center"></div>
+            <button
+                type="button"
+                onClick={setLink}
+                className={`p-2 rounded hover:bg-gray-200 ${editor.isActive('link') ? 'bg-gray-200 text-emerald-600' : 'text-gray-600'}`}
+                title="Link"
+            >
+                <LinkIcon className="w-4 h-4" />
+            </button>
+            <button
+                type="button"
+                onClick={addImage}
+                className="p-2 rounded hover:bg-gray-200 text-gray-600"
+                title="Image"
+            >
+                <ImageIcon className="w-4 h-4" />
+            </button>
+            <button
+                type="button"
+                onClick={addYoutube}
+                className="p-2 rounded hover:bg-gray-200 text-gray-600"
+                title="YouTube"
+            >
+                <YoutubeIcon className="w-4 h-4" />
+            </button>
+            <div className="w-px h-6 bg-gray-300 mx-1 self-center"></div>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().undo().run()}
+                disabled={!editor.can().chain().focus().undo().run()}
+                className="p-2 rounded hover:bg-gray-200 text-gray-600 disabled:opacity-50"
+                title="Undo"
+            >
+                <Undo className="w-4 h-4" />
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().redo().run()}
+                disabled={!editor.can().chain().focus().redo().run()}
+                className="p-2 rounded hover:bg-gray-200 text-gray-600 disabled:opacity-50"
+                title="Redo"
+            >
+                <Redo className="w-4 h-4" />
+            </button>
+        </div>
+    )
+}
+
+export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
+    const editor = useEditor({
+        extensions: [
+            StarterKit,
+            Link.configure({
+                openOnClick: false,
+            }),
+            Image,
+            Youtube.configure({
+                controls: false,
+            }),
+            Placeholder.configure({
+                placeholder: placeholder || 'Write your content here...',
+            }),
+        ],
+        content: value,
+        onUpdate: ({ editor }) => {
+            onChange(editor.getHTML())
+        },
+        editorProps: {
+            attributes: {
+                class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[400px] px-4 py-3',
+            },
+        },
+    })
+
+    return (
+        <div className="border border-gray-300 rounded-lg overflow-hidden bg-white">
+            <MenuBar editor={editor} />
+            <EditorContent editor={editor} />
         </div>
     )
 }
