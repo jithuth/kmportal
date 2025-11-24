@@ -1,6 +1,6 @@
 "use client"
 
-import { Header } from "@/components/layout/header"
+import { HeaderClient } from "@/components/layout/header-client"
 import { Footer } from "@/components/layout/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -163,7 +163,7 @@ export default function NewClassifiedPage() {
     if (success) {
         return (
             <div className="min-h-screen flex flex-col bg-gray-50">
-                <Header />
+                <HeaderClient />
                 <main className="flex-grow flex items-center justify-center p-8">
                     <Card className="max-w-md w-full">
                         <CardContent className="pt-6 text-center">
@@ -189,7 +189,7 @@ export default function NewClassifiedPage() {
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
-            <Header />
+            <HeaderClient />
 
             <main className="flex-grow max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
                 <div className="mb-6">
