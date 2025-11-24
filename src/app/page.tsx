@@ -4,18 +4,18 @@ import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { ArrowRight, TrendingUp, Calendar, Phone, Clock } from "lucide-react";
 import { stripHtml, truncateText } from "@/utils/text";
+import { HeroSlider } from "@/components/home/hero-slider";
 
 export default async function Home() {
   const supabase = await createClient();
 
-  // Fetch featured news (most recent published)
-  const { data: featuredNewsData } = await supabase
+  // Fetch featured news for slider (5 most recent)
+  const { data: sliderNewsData } = await supabase
     .from('news')
     .select('*')
     .eq('is_published', true)
     .order('created_at', { ascending: false })
-    .limit(1)
-    .single()
+    .limit(5)
 
   // Fetch recent news
   const { data: recentNewsData } = await supabase
@@ -39,14 +39,7 @@ export default async function Home() {
     console.error('Failed to fetch exchange rate:', error)
   }
 
-  const featuredNews = featuredNewsData || {
-    id: 1,
-    title: "Welcome to Kuwait Malayali Portal",
-    content: "Your trusted community portal connecting Malayalis in Kuwait. Stay updated with news, events, and services.",
-    category: "Community",
-    summary: "Your trusted community portal connecting Malayalis in Kuwait. Stay updated with news, events, and services."
-  };
-
+  const sliderNews = sliderNewsData || []
   const recentNews = recentNewsData?.slice(0, 3) || []; // Take top 3 for display
 
   return (
@@ -55,33 +48,8 @@ export default async function Home() {
 
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
         <div className="space-y-8">
-          {/* Hero Section - Featured News */}
-          <section className="relative rounded-2xl overflow-hidden shadow-xl bg-gray-900 text-white h-[340px]">
-            {featuredNews.image_url && (
-              <div className="absolute inset-0">
-                <img
-                  src={featuredNews.image_url}
-                  alt={featuredNews.title}
-                  className="w-full h-full object-cover opacity-50 mix-blend-overlay"
-                />
-              </div>
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-            <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full md:w-3/4">
-              <span className="bg-emerald-600 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-2 inline-block">
-                {featuredNews.category || 'News'}
-              </span>
-              <h1 className="text-2xl md:text-4xl font-bold mb-2 leading-tight">
-                {featuredNews.title}
-              </h1>
-              <p className="text-gray-200 text-sm line-clamp-2 mb-4">
-                {truncateText(featuredNews.summary || stripHtml(featuredNews.content || ''), 150)}
-              </p>
-              <Link href={`/news/${featuredNews.id}`} className="inline-flex items-center bg-white text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition-colors">
-                Read More <ArrowRight className="ml-2" size={16} />
-              </Link>
-            </div>
-          </section>
+          {/* Hero Section - Featured News Slider */}
+          <HeroSlider news={sliderNews} />
 
           {/* Quick Stats / Tickers */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
