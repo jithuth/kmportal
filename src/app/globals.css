@@ -1,26 +1,112 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-inter), 'Noto Sans Malayalam', ui-sans-serif, system-ui, sans-serif;
+  --font-malayalam: 'Noto Sans Malayalam', var(--font-malayalam), sans-serif;
+}
+
+:root {
+  --background: #f9fafb;
+  /* Gray 50 */
+  --foreground: #111827;
+  /* Gray 900 */
+
+  --primary: #047857;
+  /* Emerald 700 */
+  --primary-foreground: #ffffff;
+
+  --secondary: #059669;
+  /* Emerald 600 */
+  --secondary-foreground: #ffffff;
+
+  --card: #ffffff;
+  --card-foreground: #111827;
+
+  --muted: #f3f4f6;
+  /* Gray 100 */
+  --muted-foreground: #6b7280;
+  /* Gray 500 */
+
+  --border: #e5e7eb;
+  /* Gray 200 */
+  --input: #e5e7eb;
+  --ring: #047857;
+
+  --radius: 0.75rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #111827;
+    /* Gray 900 */
+    --foreground: #f9fafb;
+    /* Gray 50 */
+
+    --primary: #10b981;
+    /* Emerald 500 */
+    --primary-foreground: #111827;
+
+    --secondary: #059669;
+    /* Emerald 600 */
+    --secondary-foreground: #ffffff;
+
+    --card: #1f2937;
+    /* Gray 800 */
+    --card-foreground: #f9fafb;
+
+    --muted: #374151;
+    /* Gray 700 */
+    --muted-foreground: #9ca3af;
+    /* Gray 400 */
+
+    --border: #374151;
+    /* Gray 700 */
+    --input: #374151;
+    --ring: #10b981;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f9fafb;
+  color: #111827;
+  font-family: var(--font-inter), 'Inter', sans-serif;
+  font-size: 0.875rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-malayalam {
+  font-family: var(--font-malayalam), 'Noto Sans Malayalam', sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #047857;
 }
