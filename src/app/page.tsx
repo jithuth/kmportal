@@ -62,7 +62,7 @@ export default async function Home() {
                 <img
                   src={featuredNews.image_url}
                   alt={featuredNews.title}
-                  className="w-full h-full object-cover opacity-60 mix-blend-overlay"
+                  className="w-full h-full object-cover opacity-50 mix-blend-overlay"
                 />
               </div>
             )}
