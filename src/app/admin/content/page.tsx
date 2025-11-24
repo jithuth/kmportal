@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { createClient } from "@/utils/supabase/server"
 import Link from "next/link"
 import { Plus, Edit, Trash, Eye, Search } from "lucide-react"
+import { stripHtml } from "@/utils/text"
 
 export default async function ContentDashboard() {
     const supabase = await createClient()
@@ -84,7 +85,7 @@ export default async function ContentDashboard() {
                                                     </div>
                                                     <div>
                                                         <p className="font-medium text-gray-900">{item.title}</p>
-                                                        <p className="text-xs text-gray-500 line-clamp-1">{item.content?.substring(0, 50)}...</p>
+                                                        <p className="text-xs text-gray-500 line-clamp-1">{stripHtml(item.content || '').substring(0, 50)}...</p>
                                                     </div>
                                                 </div>
                                             </td>
