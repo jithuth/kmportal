@@ -57,6 +57,15 @@ export default async function Home() {
         <div className="space-y-8">
           {/* Hero Section - Featured News */}
           <section className="relative rounded-2xl overflow-hidden shadow-xl bg-gray-900 text-white h-[340px]">
+            {featuredNews.image_url && (
+              <div className="absolute inset-0">
+                <img
+                  src={featuredNews.image_url}
+                  alt={featuredNews.title}
+                  className="w-full h-full object-cover opacity-60 mix-blend-overlay"
+                />
+              </div>
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
             <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full md:w-3/4">
               <span className="bg-emerald-600 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-2 inline-block">
