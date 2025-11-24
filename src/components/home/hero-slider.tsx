@@ -60,7 +60,8 @@ export function HeroSlider({ news }: HeroSliderProps) {
                     <img
                         src={currentSlide.image_url}
                         alt={currentSlide.title}
-                        className="w-full h-full object-cover opacity-10 mix-blend-overlay"
+                        className="w-full h-full object-cover mix-blend-overlay"
+                        style={{ opacity: 0.99 }}
                     />
                 </div>
             )}
