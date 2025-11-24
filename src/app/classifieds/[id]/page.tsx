@@ -1,6 +1,6 @@
 "use client"
 
-import { Header } from "@/components/layout/header"
+import { HeaderClient } from "@/components/layout/header-client"
 import { Footer } from "@/components/layout/footer"
 import { MapPin, Phone, Mail, Calendar, Eye, Tag, ChevronLeft, ChevronRight, Share2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -92,7 +92,7 @@ export default function ClassifiedDetailPage() {
     if (loading) {
         return (
             <div className="min-h-screen flex flex-col bg-gray-50">
-                <Header />
+                <HeaderClient />
                 <main className="flex-grow flex items-center justify-center">
                     <p className="text-gray-600">Loading...</p>
                 </main>
@@ -110,7 +110,7 @@ export default function ClassifiedDetailPage() {
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
-            <Header />
+            <HeaderClient />
 
             <main className="flex-grow">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -176,8 +176,8 @@ export default function ClassifiedDetailPage() {
                                                     key={index}
                                                     onClick={() => setCurrentImageIndex(index)}
                                                     className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${index === currentImageIndex
-                                                            ? 'border-emerald-600 ring-2 ring-emerald-200'
-                                                            : 'border-gray-200 hover:border-gray-300'
+                                                        ? 'border-emerald-600 ring-2 ring-emerald-200'
+                                                        : 'border-gray-200 hover:border-gray-300'
                                                         }`}
                                                 >
                                                     <img
