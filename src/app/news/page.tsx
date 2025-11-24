@@ -28,7 +28,7 @@ export default async function NewsPage() {
                     {news && news.length > 0 ? (
                         news.map((item) => (
                             <article key={item.id} className="flex flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-md">
-                                <div className="aspect-video w-full bg-gray-200 relative">
+                                <div className="h-56 w-full bg-gray-200 relative">
                                     {item.image_url ? (
                                         <img src={item.image_url} alt={item.title} className="w-full h-full object-cover" />
                                     ) : (
